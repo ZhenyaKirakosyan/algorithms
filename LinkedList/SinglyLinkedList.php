@@ -134,33 +134,6 @@ class SinglyLinkedList
         }
     }
 
-//    public function insertSLL(SinglyLinkedList $list, int $position): void
-//    {
-//        $current = $this->head;
-//        $listLastElement = $list->head;
-//
-//        if (!$current || !$listLastElement) {
-//            echo "List is empty - insertSLL \n";
-//        } else {
-//            while ($listLastElement->next) {
-//                $listLastElement = $listLastElement->next;
-//            }
-//
-//            if ($position <= 1) {
-//                $listLastElement->next = $this->head;
-//                $this->head = $list->head;
-//            } else {
-//                while ($current && $position > 2) {
-//                    $current = $current->next;
-//                    $position--;
-//                }
-//
-//                $listLastElement->next = $current->next;
-//                $current->next = $list->head;
-//            }
-//        }
-//    }
-
     public function insertSLL(SinglyLinkedList $list, int $position): void
     {
         $current = $this->head;
@@ -169,11 +142,11 @@ class SinglyLinkedList
         if (!$current || !$listLastElement) {
             echo "List is empty - insertSLL \n";
         } else {
-            if ($position <= 1) {
-                while ($listLastElement->next) {
-                    $listLastElement = $listLastElement->next;
-                }
+            while ($listLastElement->next) {
+                $listLastElement = $listLastElement->next;
+            }
 
+            if ($position <= 1) {
                 $listLastElement->next = $this->head;
                 $this->head = $list->head;
             } else {
@@ -182,14 +155,8 @@ class SinglyLinkedList
                     $position--;
                 }
 
-                $next = $current->next;
-
-                while ($current->next) {
-                    $current->next = clone $list->head;
-                    $current = $current->next;
-                }
-
-                $current->next = $next;
+                $listLastElement->next = $current->next;
+                $current->next = $list->head;
             }
         }
     }
