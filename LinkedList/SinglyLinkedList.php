@@ -136,27 +136,15 @@ class SinglyLinkedList
 
     public function insertSLL(SinglyLinkedList $list, int $position): void
     {
-        $current = $this->head;
-        $listLastElement = $list->head;
+        $current = $list->head;
 
-        if (!$current || !$listLastElement) {
+        if (!$this->head || !$current) {
             echo "List is empty - insertSLL \n";
         } else {
-            while ($listLastElement->next) {
-                $listLastElement = $listLastElement->next;
-            }
-
-            if ($position <= 1) {
-                $listLastElement->next = $this->head;
-                $this->head = $list->head;
-            } else {
-                while ($current && $position > 2) {
-                    $current = $current->next;
-                    $position--;
-                }
-
-                $listLastElement->next = $current->next;
-                $current->next = $list->head;
+            while ($current) {
+                $this->insert($current->value, $position);
+                $current = $current->next;
+                $position++;
             }
         }
     }
