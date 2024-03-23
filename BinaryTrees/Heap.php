@@ -75,12 +75,28 @@ class Heap
     {
         return 2*$parent + 2;
     }
+
+    public function sort(array &$arr)
+    {
+        $l = count($arr);
+        $this->size = $l;
+        $this->buildMaxHeap($arr);
+
+        for ($j = 1; $j < $l; $j++) {
+            --$this->size;
+            Helper::swap($arr, 0, $l - $j);
+            $this->maxHeapify($arr, 0);
+        }
+    }
 }
 
 $arr = [4, 1, 3, 2, 16, 9, 10, 14, 8, 7];
 $arr1 = [4, 1, 3, 2, 16, 9, 10, 14, 8, 7];
 $heap = new Heap();
-$heap->buildMaxHeap($arr);
-print_r($arr); // [16, 14, 10, 8, 7, 9, 3, 2, 4, 1]
-$heap->buildMinHeap($arr1);
-print_r($arr1); // [1, 2, 3, 4, 7, 9, 10, 14, 8, 16]
+$heap->sort($arr);
+print_r($arr);
+
+//$heap->buildMaxHeap($arr);
+//print_r($arr); // [16, 14, 10, 8, 7, 9, 3, 2, 4, 1]
+//$heap->buildMinHeap($arr1);
+//print_r($arr1); // [1, 2, 3, 4, 7, 9, 10, 14, 8, 16]
