@@ -26,12 +26,12 @@ class BinarySearchTree
         }
     }
 
-    public function search(int $value)
+    public function search(int $value): ?Node
     {
         return $this->searchNode($this->root, $value);
     }
 
-    private function searchNode(Node $node, int $value)
+    private function searchNode(?Node $node, int $value): ?Node
     {
         if ($node == null) return null;
 
@@ -43,6 +43,90 @@ class BinarySearchTree
             return $this->searchNode($node->right, $value);
         }
     }
+
+    public function delete(int $value): ?Node
+    {
+        return $this->deleteNode($value, $this->root);
+    }
+
+    public function deleteNode(int $value, ?Node $node): ?Node
+    {
+        if ($node === null) return null;
+
+        if ($value < $node->value) {
+            $node->left = $this->deleteNode($value, $node->left);
+        } elseif ($value > $node->value) {
+            $node->right = $this->deleteNode($value, $node->right);
+        } else {
+            if ($node->left === null) return $node->right;
+            $succ = $this->getMin($node->right);
+            $node->value = $succ->value;
+
+            $node->right = $this->deleteNode($succ->value, $node->right);
+        }
+
+        return $node;
+    }
+
+    public function getPredecessor(Node $node): ?Node
+    {
+        if ($node->left) return $this->getMax($node->left);
+
+        /** @var Node $pre */
+        $pre = null;
+        /** @var Node $next */
+        $next = $this->root;
+
+        while ($next !== $node) {
+            if ($next->value < $node->value) {
+                $pre = $next;
+                $next = $next->right;
+            } else {
+                $next = $next->left;
+            }
+        }
+
+        return $pre;
+    }
+
+    public function getSuccessor(Node $node): ?Node
+    {
+        if ($node->right) return $this->getMin($node->right);
+
+        /** @var Node $succ */
+        $succ = null;
+        /** @var Node $next */
+        $next = $this->root;
+
+        while ($next !== $node) {
+            if ($next->value > $node->value) {
+                $succ = $next;
+                $next = $next->left;
+            } else {
+                $next = $next->right;
+            }
+        }
+
+        return $succ;
+    }
+
+    public function getMin(Node $node): Node
+    {
+        while ($node->left !== null) {
+            $node = $node->left;
+        }
+
+        return $node;
+    }
+
+    public function getMax(Node $node): Node
+    {
+        while ($node->right !== null) {
+            $node = $node->right;
+        }
+
+        return $node;
+    }
 }
 
 $bst = new BinarySearchTree();
@@ -51,6 +135,14 @@ foreach ($values as $value) {
     $bst->insert($value);
 }
 
-print_r([$bst->search(15)]);
+//print_r([$bst->search(15)]);
+//$bst->delete(5);
 
-print_r($bst);
+$bst2 = new BinarySearchTree();
+$values2 = [10, 5, 20, 3, 7, 11, 19, 18, 17, 15];
+foreach ($values2 as $value) {
+    $bst2->insert($value);
+}
+// print_r($bst2);
+print_r($bst2->getPredecessor($bst2->search(18)));
+print_r($bst2->getSuccessor($bst2->search(18)));
